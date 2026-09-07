@@ -1,17 +1,21 @@
 import { useState } from "react";
 
+// Renamed the form fields from Spanish to English to match the page API.
 const initialData = {
   id: "",
-  nombre_zona: "",
-  aforo: "",
-  descripcion: "",
-  foto: "",
+  zoneName: "",
+  capacity: "",
+  description: "",
+  photo: "",
 };
 
-export function Espacio() {
+// Renamed the exported component to match the English file and route names.
+export function Spaces() {
   const [data, setData] = useState(initialData);
 
   const [errors, setErrors] = useState({});
+  // Added success feedback for a valid shared-space submission.
+  const [successMessage, setSuccessMessage] = useState("");
 
   function validateField(field, value) {
     switch (field) {
@@ -19,22 +23,22 @@ export function Espacio() {
         if (!value.trim()) return "ID is required.";
         return "";
 
-      case "nombre_zona":
+      case "zoneName":
         if (!value) return "Please select a game room.";
         return "";
 
-      case "aforo":
+      case "capacity":
         if (value === "") return "Capacity is required.";
         if (!Number.isInteger(Number(value)) || Number(value) < 1) {
           return "Capacity must be a whole number greater than 0.";
         }
         return "";
 
-      case "descripcion":
+      case "description":
         if (!value.trim()) return "Description is required.";
         return "";
 
-      case "foto":
+      case "photo":
         if (!value.trim()) return "Photo URL is required.";
         if (!/^https?:\/\/.+/.test(value)) return "Enter a valid photo URL.";
         return "";
@@ -70,6 +74,8 @@ export function Espacio() {
       ...prev,
       [name]: validateField(name, value),
     }));
+    // Clear the previous result when the form is edited again.
+    if (successMessage) setSuccessMessage("");
   }
 
   function manageChanges(e) {
@@ -81,8 +87,10 @@ export function Espacio() {
     if (Object.keys(nextErrors).length === 0) {
       console.log("Game room form is valid", {
         ...data,
-        aforo: Number(data.aforo),
+        capacity: Number(data.capacity),
       });
+      // Show the same green confirmation pattern used by Reservations.
+      setSuccessMessage("Space successfully saved!");
     }
   }
 
@@ -90,8 +98,13 @@ export function Espacio() {
     <section className="container">
       <section className="row justify-content-center">
         <section className="col-6">
-          <h1>Space Reservation</h1>
+          <h1>Manage shared spaces</h1>
           <hr />
+          {successMessage && (
+            <div className="alert alert-success" role="alert">
+              {successMessage}
+            </div>
+          )}
           <form className="border rounded p-5 shadow" onSubmit={manageChanges}>
             <label htmlFor="id" className="form-label">
               ID
@@ -106,14 +119,14 @@ export function Espacio() {
             />
             {errors.id && <small className="text-danger d-block mb-3">{errors.id}</small>}
 
-            <label htmlFor="nombre_zona" className="form-label">
+            <label htmlFor="zoneName" className="form-label">
               Zone Name
             </label>
             <select
-              className={getFieldClass("nombre_zona", "form-select mb-3")}
-              id="nombre_zona"
-              name="nombre_zona"
-              value={data.nombre_zona}
+              className={getFieldClass("zoneName", "form-select mb-3")}
+              id="zoneName"
+              name="zoneName"
+              value={data.zoneName}
               onChange={changeHandler}
             >
               <option value="">Select a game room</option>
@@ -124,54 +137,54 @@ export function Espacio() {
               <option value="Event Hall">Event Hall</option>
               <option value="Pet Park">Pet Park</option>
             </select>
-            {errors.nombre_zona && (
-              <small className="text-danger d-block mb-3">{errors.nombre_zona}</small>
+            {errors.zoneName && (
+              <small className="text-danger d-block mb-3">{errors.zoneName}</small>
             )}
 
-            <label htmlFor="aforo" className="form-label">
+            <label htmlFor="capacity" className="form-label">
               Capacity
             </label>
             <input
               type="number"
               min="1"
-              className={getFieldClass("aforo", "form-control mb-3")}
+              className={getFieldClass("capacity", "form-control mb-3")}
               placeholder="20"
-              id="aforo"
-              name="aforo"
-              value={data.aforo}
+              id="capacity"
+              name="capacity"
+              value={data.capacity}
               onChange={changeHandler}
             />
-            {errors.aforo && <small className="text-danger d-block mb-3">{errors.aforo}</small>}
+            {errors.capacity && <small className="text-danger d-block mb-3">{errors.capacity}</small>}
 
-            <label htmlFor="descripcion" className="form-label">
+            <label htmlFor="description" className="form-label">
               Description
             </label>
             <textarea
-              className={getFieldClass("descripcion", "form-control mb-3")}
+              className={getFieldClass("description", "form-control mb-3")}
               placeholder="Describe the game room"
-              id="descripcion"
-              name="descripcion"
+              id="description"
+              name="description"
               rows="4"
-              value={data.descripcion}
+              value={data.description}
               onChange={changeHandler}
             />
-            {errors.descripcion && (
-              <small className="text-danger d-block mb-3">{errors.descripcion}</small>
+            {errors.description && (
+              <small className="text-danger d-block mb-3">{errors.description}</small>
             )}
 
-            <label htmlFor="foto" className="form-label">
+            <label htmlFor="photo" className="form-label">
               Photo URL
             </label>
             <input
               type="text"
-              className={getFieldClass("foto", "form-control mb-3")}
+              className={getFieldClass("photo", "form-control mb-3")}
               placeholder="https://example.com/photo.jpg"
-              id="foto"
-              name="foto"
-              value={data.foto}
+              id="photo"
+              name="photo"
+              value={data.photo}
               onChange={changeHandler}
             />
-            {errors.foto && <small className="text-danger d-block mb-3">{errors.foto}</small>}
+            {errors.photo && <small className="text-danger d-block mb-3">{errors.photo}</small>}
 
             <button type="submit" className="btn btn-primary w-100">
               Save changes

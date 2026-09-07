@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const ZONES = [
   { id: "game-room", name: "Game Room", capacity: 10 },
@@ -43,14 +43,9 @@ function timeToMinutes(time) {
 export function Reservations() {
   const [data, setData] = useState(initialData);
   const [errors, setErrors] = useState({});
-  const [reservations, setReservations] = useState([]);
+  // Initialize from local storage without an extra render-triggering effect.
+  const [reservations, setReservations] = useState(loadReservations);
   const [successMessage, setSuccessMessage] = useState("");
-
-  useEffect(() => {
-    setReservations(loadReservations());
-  }, []);
-
-  const selectedZone = ZONES.find((z) => z.id === data.zone);
 
   function validateField(field, value, currentData) {
     switch (field) {

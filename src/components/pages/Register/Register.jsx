@@ -9,6 +9,8 @@ export function Register() {
   });
 
   const [errors, setErrors] = useState({});
+  // Added success feedback for a valid registration submission.
+  const [successMessage, setSuccessMessage] = useState("");
 
   function validateField(field, value) {
     switch (field) {
@@ -64,6 +66,8 @@ export function Register() {
       ...prev,
       [name]: fieldError,
     }));
+    // Clear the previous result when the form is edited again.
+    if (successMessage) setSuccessMessage("");
   }
 
   function manageChanges(e) {
@@ -74,6 +78,8 @@ export function Register() {
 
     if (Object.keys(nextErrors).length === 0) {
       console.log("Form is valid, submit the data", data);
+      // Show the same green confirmation pattern used by Reservations.
+      setSuccessMessage("Registration successfully completed!");
     }
   }
 
@@ -84,6 +90,11 @@ export function Register() {
           <section className="col-6">
             <h1>Register Form</h1>
             <hr />
+            {successMessage && (
+              <div className="alert alert-success" role="alert">
+                {successMessage}
+              </div>
+            )}
             <form className="border rounded p-5 shadow" onSubmit={manageChanges}>
               <input
                 type="text"
