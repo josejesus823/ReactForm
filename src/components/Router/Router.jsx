@@ -11,7 +11,7 @@ export function Router() {
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/espacio" element={<Espacio />} />
-      <Route path="/reservations" element={<Reservations />                                           
+      <Route path="/reservations" element={<Reservations />} />
     </Routes>
   );
 }
